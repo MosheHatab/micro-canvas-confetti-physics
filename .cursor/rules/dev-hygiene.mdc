@@ -1,0 +1,31 @@
+---
+description: Always-on development hygiene for micro-canvas-confetti-physics. Strict typing, physics/render separation, rAF cleanup, SSR guards.
+alwaysApply: true
+---
+
+# Confetti Physics — development hygiene
+
+## 1. Strict typing, no `any`
+
+- Never introduce `any`. Define precise interfaces/types in `src/types.ts`.
+- Public API types are exported from `src/index.ts`.
+
+## 2. Physics stays in `src/physics/`
+
+- All physics math (gravity, drag, wobble, spawn, integrate) lives in `src/physics/**` as pure functions.
+- `src/render/**` must not contain physics formulas inline.
+- `src/dom/**` handles DOM lifecycle only.
+
+## 3. No magic numbers
+
+- Extract constants to `src/constants.ts`.
+
+## 4. Resource cleanup
+
+- Every `requestAnimationFrame` paired with `cancelAnimationFrame`.
+- Every `ResizeObserver` disconnected on destroy.
+- Guard `window`, `document`, `requestAnimationFrame` for SSR.
+
+## 5. Component size / SRP
+
+- Keep files focused. Extract helpers rather than growing mega-files.

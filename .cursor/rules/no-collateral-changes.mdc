@@ -1,0 +1,11 @@
+---
+description: Prevent unrelated collateral changes during edits.
+alwaysApply: true
+---
+
+# No collateral changes
+
+- Only modify files directly required by the task.
+- Do not reformat, rename, or refactor unrelated code.
+- Do not add dependencies without explicit approval.
+- Before finishing: `npm run lint`, `npm run typecheck`, `npm run test`.

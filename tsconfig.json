@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node"],
+    "paths": {
+      "micro-canvas-confetti-physics": ["./src/index.ts"],
+      "micro-canvas-confetti-physics/physics": ["./src/physics.ts"]
+    }
+  },
+  "include": [
+    "src",
+    "demo",
+    "tests",
+    "vite.config.ts",
+    "vite.demo.config.ts",
+    "vitest.config.ts",
+    "eslint.config.js",
+    "playwright.config.ts"
+  ],
+  "exclude": ["examples", "dist", "dist-demo", "node_modules"]
+}

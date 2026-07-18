@@ -1,0 +1,13 @@
+[
+  {
+    "name": "confetti (ESM)",
+    "path": "dist/index.js",
+    "import": "{ confetti }",
+    "limit": "5 kB"
+  },
+  {
+    "name": "physics (ESM)",
+    "path": "dist/physics.js",
+    "limit": "3 kB"
+  }
+]

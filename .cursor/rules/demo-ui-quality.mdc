@@ -1,0 +1,28 @@
+---
+description: UI/UX quality checklist for the demo app. Applies to demo files only.
+globs: ["demo/**"]
+alwaysApply: false
+---
+
+# Demo UI/UX quality checklist
+
+For deeper design guidance, use the `ui-ux-pro-max` skill in `.cursor/skills/`.
+
+## Icons & visual elements
+- Use SVG icons — never emojis as UI icons.
+
+## Interaction
+- Every clickable control has `cursor-pointer`.
+- Hover feedback via color/opacity transitions (150–300ms).
+- Visible keyboard focus states.
+
+## Contrast & color
+- Body text contrast >= 4.5:1 on dark backgrounds.
+
+## Motion
+- Honor `prefers-reduced-motion` in demo controls.
+
+## Pre-delivery
+- [ ] All interactive elements have `cursor-pointer` + focus states
+- [ ] Sufficient text contrast
+- [ ] Responsive, no horizontal scroll at 375px

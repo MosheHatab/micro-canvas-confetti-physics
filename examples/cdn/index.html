@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Micro Canvas Confetti — CDN (IIFE)</title>
+		<style>
+			body {
+				font-family: system-ui, sans-serif;
+				background: #0f172a;
+				color: #f8fafc;
+				display: grid;
+				place-items: center;
+				min-height: 100vh;
+				margin: 0;
+			}
+			button {
+				padding: 0.75rem 1.5rem;
+				font-size: 1rem;
+				border: none;
+				border-radius: 0.5rem;
+				background: #22c55e;
+				color: #052e16;
+				cursor: pointer;
+				font-weight: 600;
+			}
+		</style>
+	</head>
+	<body>
+		<button type="button" id="pop">Pop confetti</button>
+		<!-- Build first: npm run build:iife → dist/confetti.iife.js -->
+		<script src="../../dist/confetti.iife.js"></script>
+		<script>
+			document.getElementById("pop").addEventListener("click", () => {
+				// Global from npm run build:iife (vite lib name: MicroCanvasConfetti)
+				window.MicroCanvasConfetti.confetti({ preset: "spark", burstRadius: 80 });
+			});
+		</script>
+	</body>
+</html>
