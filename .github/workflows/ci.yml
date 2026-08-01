@@ -53,8 +53,5 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
 
-      - name: Build demo
-        run: npm run build:demo
-
       - name: Run Playwright smoke tests
         run: npm run test:e2e

@@ -1,5 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const DEMO_BASE = "/micro-canvas-confetti-physics/";
+
 export default defineConfig({
 	testDir: "tests/e2e",
 	fullyParallel: true,
@@ -8,13 +10,14 @@ export default defineConfig({
 	workers: 1,
 	reporter: "list",
 	use: {
-		baseURL: "http://localhost:4173",
+		baseURL: `http://localhost:4173${DEMO_BASE}`,
 		trace: "on-first-retry",
 	},
 	projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
 	webServer: {
-		command: "npm run preview:demo",
-		port: 4173,
+		command: "npm run build:demo && node scripts/serve-pages.mjs",
+		url: `http://localhost:4173${DEMO_BASE}`,
 		reuseExistingServer: !process.env.CI,
+		timeout: 180_000,
 	},
 });

@@ -10,7 +10,7 @@ A **zero-dependency**, high-performance canvas confetti library — trigger burs
 
 > Package name on npm is `micro-canvas-confetti-physics` (historical). The public API is confetti-first: `confetti()`, presets, duration, and scalar — not a generic physics SDK.
 
-[**Live demo**](https://moshehatab.github.io/micro-canvas-confetti-physics/)
+[**Live demo**](https://moshehatab.github.io/micro-canvas-confetti-physics/) · [**API docs**](https://moshehatab.github.io/micro-canvas-confetti-physics/api/)
 
 ## Install
 
@@ -131,7 +131,8 @@ npm run lint
 npm run typecheck
 npm run build        # ESM + CJS → dist/
 npm run build:iife   # CDN bundle
-npm run build:demo   # static demo for GitHub Pages
+npm run build:demo   # static demo only
+npm run build:pages  # demo + TypeDoc → dist-demo/ and dist-demo/api/
 npm run docs         # TypeDoc → docs/api/
 npm run benchmark    # integrator throughput
 npm run size         # bundle budget (< 5 KB brotlied)

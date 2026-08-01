@@ -22,7 +22,7 @@
 | Motion trails | ✅ | `trails`, `trailLength` |
 | `createParticle` hook | ✅ | Per-particle customization |
 | Velocity heatmap debug | ✅ | `debugVelocityHeatmap` |
-| TypeDoc | ✅ | `npm run docs` → `docs/api/` |
+| TypeDoc | ✅ | `npm run docs` → `docs/api/`; deployed under Pages `/api/` |
 | Playwright smoke | ✅ | `npm run test:e2e` |
 | Benchmark page | ✅ | `demo/benchmark.html` |
 | Husky pre-commit | ✅ | lint + format on commit |
@@ -30,19 +30,18 @@
 | URL state sharing | ✅ | Shareable demo query params |
 | IIFE CDN build | ✅ | `npm run build:iife` |
 | Demo redesign | ✅ | Fredoka + Nunito, preset cards |
+| Pages site (demo + API) | ✅ | `npm run build:pages` → `dist-demo/` + `dist-demo/api/` |
+| Lighthouse CI | ✅ | `.github/workflows/lighthouse.yml` against built Pages site |
 
-## v1+ — planned (not built)
+## v1+ — experimental / deferred
 
-These are intentionally deferred. Stubs and design notes live in `src/planned/`.
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Web Worker physics | 🧪 Experimental | Implemented in `src/planned/worker-physics.ts` — **not** in public API / bundle |
+| OffscreenCanvas | 🧪 Experimental | Implemented in `src/planned/offscreen-render.ts` — not wired into `FrameLoop` |
+| Spatial indexing / collisions | 🧪 Experimental | `src/planned/collisions.ts` spatial hash — not wired into spawn loop |
+| VitePress docs site | ⏸ Deferred | TypeDoc on Pages `/api/` covers API reference |
+| i18n | ⏸ Deferred | Demo English only; library has no user-facing copy |
+| npm provenance | ✅ Workflow ready | Completes on first successful publish |
 
-| Feature | Why deferred |
-|---------|--------------|
-| Web Worker physics | Off-main-thread integration; needs transferable buffers + sync model |
-| OffscreenCanvas | Pairs with worker path; browser support matrix is uneven |
-| Spatial indexing / collisions | Particle–particle hits; out of scope for lightweight confetti |
-| VitePress docs site | TypeDoc covers API; marketing site is separate effort |
-| Lighthouse CI | Demo perf gate; needs stable baseline after Pages deploy |
-| i18n | Demo strings only; library has no user-facing copy |
-| npm provenance | Release workflow flag; enable at first publish |
-
-To preview a planned API shape, see `src/planned/README.md`. Imports from `src/planned/` are **not** published and will throw if called.
+Imports from `src/planned/` are **not** published. See `src/planned/README.md`.

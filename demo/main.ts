@@ -1,4 +1,8 @@
-import type { ConfettiDuration, ConfettiOptions, ConfettiPreset } from "micro-canvas-confetti-physics";
+import type {
+	ConfettiDuration,
+	ConfettiOptions,
+	ConfettiPreset,
+} from "micro-canvas-confetti-physics";
 import {
 	confetti,
 	confettiSequence,
@@ -30,6 +34,7 @@ interface DemoControls {
 }
 
 let activePreset: ConfettiPreset | "" = "";
+let stageHasBurst = false;
 
 function getControls(): DemoControls {
 	const particleEl = document.getElementById("particle-count") as HTMLInputElement;
@@ -41,7 +46,9 @@ function getControls(): DemoControls {
 	const trailsEl = document.getElementById("trails") as HTMLInputElement;
 	const heatmapEl = document.getElementById("heatmap") as HTMLInputElement;
 	const reducedEl = document.getElementById("reduced-motion") as HTMLInputElement;
-	const durationEl = document.querySelector(".duration-pill.active") as HTMLButtonElement | null;
+	const durationEl = document.querySelector(
+		"#duration-pills .seg-pill.active",
+	) as HTMLButtonElement | null;
 
 	return {
 		preset: activePreset,
@@ -77,16 +84,27 @@ function buildOptions(origin?: { x: number; y: number }): ConfettiOptions {
 	};
 }
 
+function markStageBurst(): void {
+	if (stageHasBurst) return;
+	stageHasBurst = true;
+	document.getElementById("demo-stage")?.classList.add("has-burst");
+}
+
 function burst(origin?: { x: number; y: number }): void {
+	markStageBurst();
 	if (origin) {
 		showReachRing(origin.x, origin.y, getControls().burstRadius);
 	}
 	confetti(buildOptions(origin));
 }
 
-function showReachRing(x: number, y: number, radius: number): void {
+function showReachRing(clientX: number, clientY: number, radius: number): void {
 	const stage = document.getElementById("demo-stage");
 	if (!stage || radius <= 0) return;
+
+	const rect = stage.getBoundingClientRect();
+	const x = clientX - rect.left;
+	const y = clientY - rect.top;
 
 	const existing = stage.querySelector(".reach-ring");
 	existing?.remove();
@@ -114,16 +132,19 @@ function applyPresetToControls(preset: ConfettiPreset): void {
 	if (opts.gravity !== undefined) set("gravity", opts.gravity);
 	if (opts.scalar !== undefined) set("scalar", opts.scalar);
 	if (opts.burstRadius !== undefined) set("burst-radius", opts.burstRadius);
+	else set("burst-radius", 0);
 
 	if (opts.duration) {
-		document.querySelectorAll(".duration-pill").forEach((pill) => {
-			pill.classList.toggle("active", (pill as HTMLButtonElement).dataset.duration === opts.duration);
+		document.querySelectorAll("#duration-pills .seg-pill").forEach((pill) => {
+			pill.classList.toggle(
+				"active",
+				(pill as HTMLButtonElement).dataset.duration === opts.duration,
+			);
 		});
 	}
 
 	syncRadiusPills();
 	updateLabels();
-	updateUsageCode(preset);
 }
 
 function syncRadiusPills(): void {
@@ -153,7 +174,15 @@ function renderPresetCards(): void {
 		card.type = "button";
 		card.className = "preset-card";
 		card.dataset.preset = preset;
-		card.innerHTML = `<div class="preset-name">${meta.label}</div><div class="preset-desc">${meta.description}</div>`;
+		card.title = meta.description;
+
+		const colors = PRESET_OPTIONS[preset].colors ?? [];
+		const swatches = colors
+			.slice(0, 5)
+			.map((color) => `<span class="preset-swatch" style="background:${color}"></span>`)
+			.join("");
+
+		card.innerHTML = `<div class="preset-name">${meta.label}</div><div class="preset-swatches" aria-hidden="true">${swatches}</div>`;
 		card.addEventListener("click", () => selectPreset(preset));
 		grid.appendChild(card);
 	}
@@ -163,19 +192,27 @@ function formatRadiusLabel(radius: number): string {
 	return radius <= 0 ? "Off" : `${radius}px`;
 }
 
-function updateUsageCode(preset?: ConfettiPreset): void {
+function formatOptionLines(controls: DemoControls): string[] {
+	const lines: string[] = [];
+	if (controls.preset) lines.push(`  preset: '${controls.preset}',`);
+	lines.push(`  particleCount: ${controls.particleCount},`);
+	lines.push(`  duration: '${controls.duration}',`);
+	lines.push(`  scalar: ${controls.scalar},`);
+	lines.push(`  spread: ${controls.spread},`);
+	lines.push(`  startVelocity: ${controls.startVelocity},`);
+	lines.push(`  gravity: ${controls.gravity},`);
+	if (controls.burstRadius > 0) lines.push(`  burstRadius: ${controls.burstRadius},`);
+	if (controls.trails) lines.push(`  trails: true,`);
+	if (controls.heatmap) lines.push(`  debugVelocityHeatmap: true,`);
+	lines.push(`  disableForReducedMotion: ${controls.disableForReducedMotion},`);
+	return lines;
+}
+
+function updateUsageCode(): void {
 	const el = document.getElementById("usage-code");
 	if (!el) return;
-	const controls = getControls();
-	const radiusLine =
-		controls.burstRadius > 0 ? `\n  burstRadius: ${controls.burstRadius},` : "";
-
-	if (preset) {
-		el.textContent = `import { confetti } from 'micro-canvas-confetti-physics';\n\nconfetti({\n  preset: '${preset}',${radiusLine}\n});`;
-		return;
-	}
-
-	el.textContent = `import { confetti } from 'micro-canvas-confetti-physics';\n\nconfetti({\n  particleCount: ${controls.particleCount},\n  duration: '${controls.duration}',\n  scalar: ${controls.scalar},${radiusLine}\n});`;
+	const lines = formatOptionLines(getControls());
+	el.textContent = `import { confetti } from 'micro-canvas-confetti-physics';\n\nconfetti({\n${lines.join("\n")}\n});`;
 }
 
 function updateLabels(): void {
@@ -193,7 +230,7 @@ function updateLabels(): void {
 		if (el) el.textContent = String(value);
 	}
 	writeStateToUrl(controls);
-	updateUsageCode(activePreset || undefined);
+	updateUsageCode();
 }
 
 function bindControls(): void {
@@ -220,9 +257,11 @@ function bindControls(): void {
 		});
 	}
 
-	document.querySelectorAll(".duration-pill").forEach((pill) => {
+	document.querySelectorAll("#duration-pills .seg-pill").forEach((pill) => {
 		pill.addEventListener("click", () => {
-			document.querySelectorAll(".duration-pill").forEach((p) => p.classList.remove("active"));
+			document
+				.querySelectorAll("#duration-pills .seg-pill")
+				.forEach((p) => p.classList.remove("active"));
 			pill.classList.add("active");
 			updateLabels();
 		});
@@ -264,24 +303,108 @@ function applyUrlState(): void {
 	if (state.scalar !== undefined) setVal("scalar", state.scalar);
 	if (state.burstRadius !== undefined) setVal("burst-radius", state.burstRadius);
 	if (state.duration) {
-		document.querySelectorAll(".duration-pill").forEach((pill) => {
+		document.querySelectorAll("#duration-pills .seg-pill").forEach((pill) => {
 			pill.classList.toggle(
 				"active",
 				(pill as HTMLButtonElement).dataset.duration === state.duration,
 			);
 		});
 	}
-	if (state.disableForReducedMotion !== undefined) setVal("reduced-motion", state.disableForReducedMotion);
+	if (state.disableForReducedMotion !== undefined)
+		setVal("reduced-motion", state.disableForReducedMotion);
 	syncRadiusPills();
 	updateLabels();
 }
 
-document.getElementById("launch-btn")?.addEventListener("click", () => burst());
+function stageCenterOrigin(): { x: number; y: number } {
+	const stage = document.getElementById("demo-stage");
+	if (!stage) {
+		return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+	}
+	const rect = stage.getBoundingClientRect();
+	return {
+		x: rect.left + rect.width / 2,
+		y: rect.top + rect.height / 2,
+	};
+}
+
+function shouldSkipWelcomeBurst(): boolean {
+	const reducedEl = document.getElementById("reduced-motion") as HTMLInputElement | null;
+	if (reducedEl?.checked && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+		return true;
+	}
+	return Boolean(readStateFromUrl()?.preset);
+}
+
+function welcomeBurst(): void {
+	if (shouldSkipWelcomeBurst()) return;
+	burst(stageCenterOrigin());
+}
+
+function bindCopyInstall(): void {
+	const btn = document.getElementById("copy-install");
+	if (!btn) return;
+
+	btn.addEventListener("click", async () => {
+		const command = "npm install micro-canvas-confetti-physics";
+		try {
+			await navigator.clipboard.writeText(command);
+			btn.classList.add("is-copied");
+			btn.textContent = "Copied!";
+			window.setTimeout(() => {
+				btn.classList.remove("is-copied");
+				btn.textContent = "Copy install";
+			}, 1600);
+		} catch {
+			btn.textContent = "Copy failed";
+			window.setTimeout(() => {
+				btn.textContent = "Copy install";
+			}, 1600);
+		}
+	});
+}
+
+function bindStage(): void {
+	const stage = document.getElementById("demo-stage");
+	if (!stage) return;
+
+	stage.addEventListener("click", (e) => {
+		burst({ x: e.clientX, y: e.clientY });
+	});
+
+	stage.addEventListener("keydown", (e) => {
+		if (e.key === "Enter" || e.key === " ") {
+			e.preventDefault();
+			burst(stageCenterOrigin());
+		}
+	});
+}
+
+function clearStage(): void {
+	reset();
+	stageHasBurst = false;
+	document.getElementById("demo-stage")?.classList.remove("has-burst");
+}
+
+document.getElementById("launch-btn")?.addEventListener("click", () => burst(stageCenterOrigin()));
 
 document.getElementById("sequence-btn")?.addEventListener("click", () => {
+	markStageBurst();
 	confettiSequence([
-		{ delay: 0, options: { preset: "cannon", origin: { x: window.innerWidth * 0.3, y: window.innerHeight * 0.7 } } },
-		{ delay: 200, options: { preset: "cannon", origin: { x: window.innerWidth * 0.7, y: window.innerHeight * 0.7 } } },
+		{
+			delay: 0,
+			options: {
+				preset: "cannon",
+				origin: { x: window.innerWidth * 0.3, y: window.innerHeight * 0.7 },
+			},
+		},
+		{
+			delay: 200,
+			options: {
+				preset: "cannon",
+				origin: { x: window.innerWidth * 0.7, y: window.innerHeight * 0.7 },
+			},
+		},
 		{ delay: 450, options: { preset: "celebration" } },
 	]);
 });
@@ -291,18 +414,34 @@ document.getElementById("snapshot-btn")?.addEventListener("click", () => {
 	if (dataUrl) downloadSnapshot(dataUrl);
 });
 
-document.getElementById("reset-btn")?.addEventListener("click", () => reset());
+document.getElementById("reset-btn")?.addEventListener("click", () => {
+	clearStage();
+});
 
 document.addEventListener("click", (e) => {
 	const target = e.target as HTMLElement;
-	if (target.closest("button, input, select, a, .panel, header, .preset-card, .duration-pill, .radius-pill")) return;
+	if (target.closest("#demo-stage")) return;
+	if (
+		target.closest(
+			"button, input, select, a, label, .panel, header, .preset-card, .seg-pill, .code-block, .shortcut-help, .controls-aside, .shortcut-row",
+		)
+	) {
+		return;
+	}
 	burst({ x: e.clientX, y: e.clientY });
 });
 
 renderPresetCards();
 bindControls();
+bindStage();
+bindCopyInstall();
 applyUrlState();
 initUrlState();
 initFpsHud(getActiveParticleCount, getLastFrameMs);
 initFullscreen("demo-stage");
-initShortcuts({ burst: () => burst(), reset });
+initShortcuts({
+	burst: () => burst(stageCenterOrigin()),
+	reset: clearStage,
+});
+updateUsageCode();
+window.setTimeout(welcomeBurst, 350);

@@ -53,18 +53,28 @@ export const DURATION_SCALAR: Record<ConfettiDuration, number> = {
 };
 
 export const DEFAULT_COLORS: readonly string[] = [
-	"#FF6B6B",
-	"#4ECDC4",
-	"#45B7D1",
-	"#96CEB4",
-	"#FFEAA7",
-	"#DDA0DD",
+	"#FF2D55",
+	"#FFCC00",
+	"#34C759",
+	"#007AFF",
+	"#AF52DE",
+	"#FF9500",
+	"#5AC8FA",
+	"#FF6B9D",
 ];
 
-export const CELEBRATION_COLORS = ["#FFD700", "#FF6B6B", "#FF1493", "#00CED1", "#ADFF2F"] as const;
+export const CELEBRATION_COLORS = [
+	"#FFD700",
+	"#FF2D55",
+	"#FF1493",
+	"#00E5FF",
+	"#39FF14",
+	"#FF9500",
+	"#BF5AF2",
+] as const;
 export const SUBTLE_COLORS = ["#B8C5D6", "#D4A5A5", "#A8D8EA", "#C9B1FF"] as const;
-export const CANNON_COLORS = ["#FF4500", "#FFA500", "#FFFF00", "#FF6347"] as const;
-export const SPARK_COLORS = ["#FFFFFF", "#FFFACD", "#E0E0E0"] as const;
+export const CANNON_COLORS = ["#FF4500", "#FFA500", "#FFFF00", "#FF2D55", "#FF6347"] as const;
+export const SPARK_COLORS = ["#FFFFFF", "#FFFACD", "#FFE4E1", "#E0FFFF"] as const;
 
 export const DEFAULT_SHAPES = ["rect", "circle"] as const;
 
@@ -129,7 +139,10 @@ export const PRESET_OPTIONS: Record<ConfettiPreset, Partial<ConfettiOptions>> = 
 };
 
 /** Human-readable labels and descriptions for demo and docs. */
-export const PRESET_LABELS: Record<ConfettiPreset, { readonly label: string; readonly description: string }> = {
+export const PRESET_LABELS: Record<
+	ConfettiPreset,
+	{ readonly label: string; readonly description: string }
+> = {
 	celebration: {
 		label: "Celebration",
 		description: "Big, colorful burst — 150 pieces, wide spread",

@@ -5,5 +5,7 @@
   "name": "Micro Canvas Confetti",
   "readme": "none",
   "excludePrivate": true,
-  "excludeInternal": true
+  "excludeInternal": true,
+  "githubPages": true,
+  "hostedBaseUrl": "https://moshehatab.github.io/micro-canvas-confetti-physics/api/"
 }

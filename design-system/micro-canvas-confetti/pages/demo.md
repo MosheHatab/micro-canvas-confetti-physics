@@ -1,21 +1,24 @@
 # Demo Page Overrides
 
 ## Layout
-- Full-width interactive stage (min-height 440px)
-- Controls sidebar on right (lg breakpoint)
+- Responsive stage: top on mobile, left on desktop (`lg+`)
+- Compact controls aside (all sections open)
+- Light festive shell (warm white + coral / gold / cyan washes)
 - FPS HUD bottom-right overlay
 
-## Canvas area
-- `cursor-crosshair` on demo stage
-- Click anywhere to burst from cursor
-- Dashed reach ring flash on click when `burstRadius` > 0
+## Canvas / stage
+- Dedicated tappable stage (primary play surface on mobile)
+- Desktop also allows clicks outside controls
+- `cursor-crosshair` on stage; Enter/Space when focused
+- Reach ring flash on stage when `burstRadius` > 0
+- Fullscreen targets the stage
 
 ## Controls
-- Preset cards: celebration, subtle, cannon, spark (stay selected when settings change)
-- Duration pills: short, normal, long
-- Reach pills + slider: off, 50–1000px (`burstRadius`)
-- Range inputs: pieces, size (scalar), spread, speed, fall (gravity)
-- Toggles: motion trails, velocity heatmap, reduced motion
+- Preset cards with color swatches
+- Burst settings in responsive slider grid
+- Install snippet mirrors full live config (preset + all knobs/toggles)
+- Keyboard shortcut row hidden below `md`
+- Mobile touch targets ≥ 44px for buttons, pills, presets
 
 ## Code blocks
-- Monospace on dark surface for install + live usage snippet
+- Light rose-tinted monospace; wraps without clipped scrollboxes

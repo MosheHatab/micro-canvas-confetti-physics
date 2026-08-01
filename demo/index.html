@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" id="page-root">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,35 +10,56 @@
 		<div id="fps-hud" class="fps-hud" aria-live="polite"></div>
 
 		<header class="site-header">
-			<div style="max-width: 72rem; margin: 0 auto; padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap">
+			<div class="header-inner">
 				<div>
 					<span class="brand-badge">Zero dependencies</span>
-					<h1 style="font-size: 1.35rem; font-weight: 600; margin-top: 0.4rem; letter-spacing: -0.02em">
-						Micro Canvas Confetti
-					</h1>
-					<p style="color: var(--color-confetti-muted); font-size: 0.85rem; margin-top: 0.2rem">
-						Trigger bursts anywhere — tiny sparks to full celebrations
+					<h1 class="site-title">Micro Canvas Confetti</h1>
+					<p class="site-tagline">
+						<span class="tagline-mobile">Tap the stage to celebrate</span>
+						<span class="tagline-desktop">Click the stage or anywhere outside controls</span>
+						— tiny sparks to full bursts
 					</p>
 				</div>
-				<div style="display: flex; gap: 0.5rem; flex-wrap: wrap">
+				<div class="header-actions">
 					<button id="launch-btn" type="button" class="btn btn-primary">Pop confetti</button>
-					<button id="sequence-btn" type="button" class="btn btn-secondary">Sequence</button>
-					<button id="snapshot-btn" type="button" class="btn btn-ghost">Save PNG</button>
+					<button id="sequence-btn" type="button" class="btn btn-accent">Sequence</button>
+					<button id="snapshot-btn" type="button" class="btn btn-secondary">Save PNG</button>
 					<button id="reset-btn" type="button" class="btn btn-secondary">Clear</button>
+					<button id="copy-install" type="button" class="btn btn-ghost" title="Copy install command">
+						Copy install
+					</button>
 				</div>
 			</div>
 		</header>
 
-		<main style="max-width: 72rem; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; display: grid; gap: 1.5rem; grid-template-columns: 1fr">
-			<div style="display: grid; gap: 1.5rem; grid-template-columns: 1fr" class="main-grid">
-				<section>
-					<div id="demo-stage" class="demo-stage" role="application" aria-label="Click anywhere to trigger confetti">
+		<main class="page-main">
+			<div class="main-grid">
+				<section class="stage-section">
+					<div
+						id="demo-stage"
+						class="demo-stage"
+						role="button"
+						tabindex="0"
+						aria-label="Confetti stage — tap or click to burst"
+					>
+						<div class="demo-stage-glow" aria-hidden="true"></div>
+						<div class="demo-stage-speckles" aria-hidden="true">
+							<span class="flake flake-a"></span>
+							<span class="flake flake-b"></span>
+							<span class="flake flake-c"></span>
+							<span class="flake flake-d"></span>
+							<span class="flake flake-e"></span>
+							<span class="flake flake-f"></span>
+							<span class="flake flake-g"></span>
+							<span class="flake flake-h"></span>
+						</div>
 						<div class="demo-stage-hint">
-							<strong>Click to celebrate</strong>
-							<span>Tap the stage or use the buttons</span>
+							<strong class="hint-mobile">Tap to celebrate</strong>
+							<strong class="hint-desktop">Click to celebrate</strong>
+							<span>Or use Pop confetti</span>
 						</div>
 					</div>
-					<p style="color: var(--color-confetti-muted); font-size: 0.78rem; margin-top: 0.75rem">
+					<p class="shortcut-row desktop-only">
 						<kbd class="kbd">Space</kbd> pop
 						<kbd class="kbd">R</kbd> clear
 						<kbd class="kbd">F</kbd> fullscreen
@@ -46,86 +67,100 @@
 					</p>
 				</section>
 
-				<aside style="display: grid; gap: 1rem">
+				<aside class="controls-aside">
 					<div class="panel">
-						<h2 class="panel-title">Burst presets</h2>
+						<h2 class="panel-title">Presets</h2>
 						<div id="preset-grid" class="preset-grid"></div>
 					</div>
 
 					<div class="panel">
 						<h2 class="panel-title">Burst settings</h2>
-						<div style="display: grid; gap: 1rem">
-							<div>
+						<div class="settings-stack">
+							<div class="control-row">
 								<span class="control-label">Duration</span>
-								<div id="duration-pills" class="duration-pills" style="margin-top: 0.4rem">
-									<button type="button" class="duration-pill" data-duration="short">Short</button>
-									<button type="button" class="duration-pill active" data-duration="normal">Normal</button>
-									<button type="button" class="duration-pill" data-duration="long">Long</button>
+								<div id="duration-pills" class="seg-pills">
+									<button type="button" class="seg-pill" data-duration="short">Short</button>
+									<button type="button" class="seg-pill active" data-duration="normal">Normal</button>
+									<button type="button" class="seg-pill" data-duration="long">Long</button>
 								</div>
 							</div>
-							<label class="control-label">
-								Pieces: <span id="particle-count-val">80</span>
-								<input id="particle-count" type="range" min="1" max="500" value="80" class="control-range" />
-							</label>
-							<label class="control-label">
-								Size: <span id="scalar-val">1</span>×
-								<input id="scalar" type="range" min="0.3" max="2" step="0.05" value="1" class="control-range" />
-							</label>
-							<label class="control-label">
-								Spread: <span id="spread-val">45</span>°
-								<input id="spread" type="range" min="0" max="360" value="45" class="control-range" />
-							</label>
-							<label class="control-label">
-								Speed: <span id="velocity-val">45</span>
-								<input id="velocity" type="range" min="0" max="200" value="45" class="control-range" />
-							</label>
-							<label class="control-label">
-								Fall: <span id="gravity-val">1.2</span>
-								<input id="gravity" type="range" min="0" max="5" step="0.1" value="1.2" class="control-range" />
-							</label>
-							<div>
-								<span class="control-label">Reach: <span id="burst-radius-val">Off</span></span>
-								<div id="radius-pills" class="duration-pills" style="margin-top: 0.4rem">
-									<button type="button" class="radius-pill duration-pill active" data-radius="0">Off</button>
-									<button type="button" class="radius-pill duration-pill" data-radius="50">50px</button>
-									<button type="button" class="radius-pill duration-pill" data-radius="200">200px</button>
-									<button type="button" class="radius-pill duration-pill" data-radius="500">500px</button>
-									<button type="button" class="radius-pill duration-pill" data-radius="1000">1000px</button>
-								</div>
-								<input id="burst-radius" type="range" min="0" max="1000" step="10" value="0" class="control-range" style="margin-top: 0.5rem" />
+
+							<div class="slider-grid">
+								<label class="control-label">
+									Pieces: <span id="particle-count-val">80</span>
+									<input id="particle-count" type="range" min="1" max="500" value="80" class="control-range" />
+								</label>
+								<label class="control-label">
+									Size: <span id="scalar-val">1</span>×
+									<input id="scalar" type="range" min="0.3" max="2" step="0.05" value="1" class="control-range" />
+								</label>
+								<label class="control-label">
+									Spread: <span id="spread-val">45</span>°
+									<input id="spread" type="range" min="0" max="360" value="45" class="control-range" />
+								</label>
+								<label class="control-label">
+									Speed: <span id="velocity-val">45</span>
+									<input id="velocity" type="range" min="0" max="200" value="45" class="control-range" />
+								</label>
+								<label class="control-label">
+									Fall: <span id="gravity-val">1.2</span>
+									<input id="gravity" type="range" min="0" max="5" step="0.1" value="1.2" class="control-range" />
+								</label>
+								<label class="control-label">
+									Reach: <span id="burst-radius-val">Off</span>
+									<input id="burst-radius" type="range" min="0" max="1000" step="10" value="0" class="control-range" />
+								</label>
 							</div>
-							<label class="control-label" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer">
-								<input id="trails" type="checkbox" style="cursor: pointer" />
-								Motion trails
-							</label>
-							<label class="control-label" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer">
-								<input id="heatmap" type="checkbox" style="cursor: pointer" />
-								Velocity heatmap (debug)
-							</label>
-							<label class="control-label" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer">
-								<input id="reduced-motion" type="checkbox" checked style="cursor: pointer" />
-								Respect reduced motion
-							</label>
+
+							<div class="control-row">
+								<span class="control-label">Reach presets</span>
+								<div id="radius-pills" class="seg-pills">
+									<button type="button" class="seg-pill radius-pill active" data-radius="0">Off</button>
+									<button type="button" class="seg-pill radius-pill" data-radius="50">50</button>
+									<button type="button" class="seg-pill radius-pill" data-radius="200">200</button>
+									<button type="button" class="seg-pill radius-pill" data-radius="500">500</button>
+									<button type="button" class="seg-pill radius-pill" data-radius="1000">1000</button>
+								</div>
+							</div>
+
+							<div class="check-row">
+								<label class="control-check">
+									<input id="trails" type="checkbox" />
+									Trails
+								</label>
+								<label class="control-check">
+									<input id="heatmap" type="checkbox" />
+									Heatmap
+								</label>
+								<label class="control-check">
+									<input id="reduced-motion" type="checkbox" checked />
+									Reduced motion
+								</label>
+							</div>
 						</div>
 					</div>
 
 					<div class="panel">
 						<h2 class="panel-title">Install</h2>
 						<pre class="code-block"><code>npm install micro-canvas-confetti-physics</code></pre>
-						<pre class="code-block" style="margin-top: 0.5rem"><code id="usage-code">import { confetti } from 'micro-canvas-confetti-physics';
-
-// Quick micro burst — ends in ~1s
-confetti({ preset: 'spark' });
-
-// Custom short burst with reach limit
-confetti({ particleCount: 20, duration: 'short', scalar: 0.6, burstRadius: 200 });</code></pre>
+						<pre class="code-block"><code id="usage-code">import { confetti } from 'micro-canvas-confetti-physics';
+confetti({ particleCount: 80, duration: 'normal', scalar: 1, spread: 45, startVelocity: 45, gravity: 1.2 });</code></pre>
 					</div>
 
-					<div class="panel">
+					<div class="panel panel-links">
 						<h2 class="panel-title">Links</h2>
-						<ul style="font-size: 0.85rem; list-style: none; display: grid; gap: 0.4rem; color: #cbd5e1">
+						<ul class="links-list links-inline">
 							<li><a href="benchmark.html" class="link">Benchmark</a></li>
-							<li><a href="https://github.com/MosheHatab/micro-canvas-confetti-physics" class="link" target="_blank" rel="noopener">GitHub</a></li>
+							<li><a href="api/" class="link">API docs</a></li>
+							<li>
+								<a
+									href="https://github.com/MosheHatab/micro-canvas-confetti-physics"
+									class="link"
+									target="_blank"
+									rel="noopener"
+									>GitHub</a
+								>
+							</li>
 						</ul>
 					</div>
 				</aside>
@@ -135,7 +170,7 @@ confetti({ particleCount: 20, duration: 'short', scalar: 0.6, burstRadius: 200 }
 		<div id="shortcut-help" class="shortcut-help hidden" role="dialog" aria-label="Keyboard shortcuts">
 			<div class="shortcut-help-content">
 				<h3>Shortcuts</h3>
-				<ul style="list-style: none; display: grid; gap: 0.4rem; font-size: 0.85rem; color: #cbd5e1">
+				<ul class="help-list">
 					<li><kbd class="kbd">Space</kbd> Pop from center</li>
 					<li><kbd class="kbd">R</kbd> Clear canvas</li>
 					<li><kbd class="kbd">F</kbd> Fullscreen stage</li>
@@ -145,11 +180,6 @@ confetti({ particleCount: 20, duration: 'short', scalar: 0.6, burstRadius: 200 }
 			</div>
 		</div>
 
-		<style>
-			@media (min-width: 1024px) {
-				.main-grid { grid-template-columns: 1.4fr 1fr !important; }
-			}
-		</style>
 		<script type="module" src="./main.ts"></script>
 	</body>
 </html>

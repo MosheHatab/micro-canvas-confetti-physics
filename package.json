@@ -1,6 +1,6 @@
 {
   "name": "micro-canvas-confetti-physics",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Zero-dependency canvas confetti — presets, sequences, reach limits, and custom 2D motion (gravity, drag, 3D wobble) at 60fps.",
   "type": "module",
   "license": "MIT",
@@ -61,6 +61,7 @@
     "build": "tsc -p tsconfig.build.json && vite build && node scripts/postbuild.mjs",
     "build:iife": "vite build --config vite.iife.config.ts",
     "build:demo": "vite build --config vite.demo.config.ts",
+    "build:pages": "node scripts/build-pages.mjs",
     "preview:demo": "vite preview --config vite.demo.config.ts",
     "test": "vitest run",
     "test:watch": "vitest",

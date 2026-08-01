@@ -1,24 +1,20 @@
-# Planned APIs (v1+, not implemented)
+# Planned / experimental APIs (v1+)
 
-This folder documents future APIs. Nothing here is exported from the package entry point.
+Nothing in this folder is exported from the published package entry (`src/index.ts`).
+Import only from source, tests, or demos.
 
-## Web Worker physics (`worker-physics.ts`)
+| Module | Status | Notes |
+|--------|--------|-------|
+| `worker-physics.ts` | **Experimental (implemented)** | Blob Worker + Float32Array stride protocol |
+| `offscreen-render.ts` | **Experimental (implemented)** | `transferControlToOffscreen` when supported |
+| `collisions.ts` | **Experimental (implemented)** | Uniform grid spatial hash; not wired into the frame loop |
 
-Goal: run `integrateParticles` in a worker and post particle buffers back each frame.
+## Why these stay out of the public bundle
 
-```typescript
-// Future shape (not available today)
-import { createWorkerPhysicsEngine } from "micro-canvas-confetti-physics/planned/worker-physics";
+- Worker + Offscreen paths need opt-in wiring in `FrameLoop` and careful fallbacks.
+- Collision queries add per-frame cost for little visual gain in celebration confetti.
+- Keeping them here preserves the < 5 KB gzipped public budget.
 
-const engine = createWorkerPhysicsEngine();
-await engine.init();
-engine.integrate(particles, dt);
-```
+## VitePress
 
-## OffscreenCanvas render (`offscreen-render.ts`)
-
-Goal: render on `OffscreenCanvas` inside a worker when supported.
-
-## Collision pass (`collisions.ts`)
-
-Goal: optional light spatial hash for overlapping rects — disabled by default to preserve bundle budget.
+Narrative docs site is deferred. TypeDoc is deployed to GitHub Pages at `/api/` via `npm run build:pages`.

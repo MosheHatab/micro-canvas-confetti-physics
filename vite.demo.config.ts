@@ -1,12 +1,35 @@
 import { resolve } from "node:path";
 
 import tailwindcss from "@tailwindcss/vite";
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
+
+const DEMO_BASE = "/micro-canvas-confetti-physics/";
+
+/** Redirect /micro-canvas-confetti-physics → /micro-canvas-confetti-physics/ (Vite requires trailing slash). */
+function demoBaseRedirect(): Plugin {
+	const basePath = DEMO_BASE.replace(/\/$/, "");
+	return {
+		name: "demo-base-redirect",
+		configureServer(server) {
+			server.middlewares.use((req, res, next) => {
+				const url = req.url ?? "";
+				const isExactBase = url === basePath || url.startsWith(`${basePath}?`);
+				if (!isExactBase) {
+					next();
+					return;
+				}
+				const query = url.includes("?") ? url.slice(url.indexOf("?")) : "";
+				res.writeHead(301, { Location: `${DEMO_BASE}${query}` });
+				res.end();
+			});
+		},
+	};
+}
 
 export default defineConfig({
 	root: "demo",
-	base: "/micro-canvas-confetti-physics/",
-	plugins: [tailwindcss()],
+	base: DEMO_BASE,
+	plugins: [demoBaseRedirect(), tailwindcss()],
 	resolve: {
 		alias: {
 			"micro-canvas-confetti-physics": resolve(__dirname, "src/index.ts"),

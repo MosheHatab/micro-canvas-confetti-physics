@@ -1,9 +1,12 @@
 # Changelog
 
-## Unreleased
+## 0.2.0
 
-### Added
+### Minor Changes
 
+- Pages deploy ships TypeDoc under `/api/` via `npm run build:pages`
+- Lighthouse CI workflow against the built Pages site
+- Experimental v1+ modules under `src/planned/` (worker physics, OffscreenCanvas, spatial hash) — not in public API
 - Confetti-native options: `duration`, `scalar`, `decay`, `trails`, `trailLength`, `createParticle`
 - `burstRadius` — max travel distance from burst origin; pieces fade naturally when they cross it
 - `spark` preset — micro 8-piece burst that ends in ~1s (default 80px reach)
