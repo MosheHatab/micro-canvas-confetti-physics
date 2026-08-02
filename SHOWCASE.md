@@ -6,6 +6,7 @@ Projects and demos using **micro-canvas-confetti-physics**. [Send a PR](CONTRIBU
 
 | Project | Description |
 |---------|-------------|
+| [npm package `@1.0.0`](https://www.npmjs.com/package/micro-canvas-confetti-physics) | Install: `npm install micro-canvas-confetti-physics` |
 | [Live demo playground](https://moshehatab.github.io/micro-canvas-confetti-physics/) | Interactive controls, presets, FPS HUD, sequences, reach limits |
 | [API reference](https://moshehatab.github.io/micro-canvas-confetti-physics/api/) | TypeDoc-generated docs for the public API |
 | [Benchmark page](https://moshehatab.github.io/micro-canvas-confetti-physics/benchmark.html) | In-browser integrator throughput by particle count |

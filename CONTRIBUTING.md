@@ -57,6 +57,22 @@ npx changeset          # describe your change
 # After merge to main, CI opens a Version Packages PR
 ```
 
+**Current npm:** [`micro-canvas-confetti-physics@1.0.0`](https://www.npmjs.com/package/micro-canvas-confetti-physics) (first stable release was published manually).
+
+**CI Release workflow** (`.github/workflows/release.yml`):
+- Pending changesets → opens/updates a Version Packages PR
+- Local version ahead of npm → runs `changeset publish` (needs [Trusted Publisher](https://docs.npmjs.com/trusted-publishers/) on the package for `release.yml`, or repo secret `NPM_TOKEN`)
+- Otherwise → no-op (green), so docs/chore pushes do not fail Release
+
+**Local publish** (maintainers): use a granular access token with publish + “Bypass two-factor authentication”, then:
+
+```bash
+$env:NODE_AUTH_TOKEN="npm_…"   # PowerShell; do not commit tokens
+npm run publish:safe             # builds, publint/attw, publish without local provenance
+```
+
+Do not commit `.npmrc` with tokens (gitignored). Prefer Trusted Publishing for routine releases after setup.
+
 ## Code review
 
 Run `/confetti-code-review` in Cursor for an advisory checklist.

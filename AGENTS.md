@@ -2,7 +2,7 @@
 
 ## Project overview
 
-Zero-dependency TypeScript npm package: canvas confetti with custom 2D physics (gravity, drag, 3D wobble). Published as ESM + CJS with types.
+Zero-dependency TypeScript npm package: canvas confetti with custom 2D physics (gravity, drag, 3D wobble). Published on npm as **`micro-canvas-confetti-physics@1.0.0`** (ESM + CJS with types).
 
 Public API highlights: `confetti()`, presets, `duration`/`scalar`, `burstRadius` (reach limit), `confetti.promise()`, `confetti.snapshot()`, `confettiSequence()`.
 

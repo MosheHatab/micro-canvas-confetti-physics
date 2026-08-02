@@ -1,5 +1,14 @@
 # Roadmap
 
+## v1.0.0 — shipped (npm)
+
+Stable package published: [`micro-canvas-confetti-physics@1.0.0`](https://www.npmjs.com/package/micro-canvas-confetti-physics)
+
+- Confetti-first API: `confetti()`, `confetti.promise()`, presets (`celebration`, `subtle`, `cannon`, `spark`)
+- `duration` / `scalar` / `decay`, `burstRadius`, trails, `confetti.snapshot()`, `confettiSequence()`
+- ESM + CJS + types + `./physics` subpath
+- [Live demo](https://moshehatab.github.io/micro-canvas-confetti-physics/) and [API docs](https://moshehatab.github.io/micro-canvas-confetti-physics/api/)
+
 ## v0.1 — shipped
 
 - `confetti()` / `confetti.promise()` API
@@ -33,15 +42,16 @@
 | Pages site (demo + API) | ✅ | `npm run build:pages` → `dist-demo/` + `dist-demo/api/` |
 | Lighthouse CI | ✅ | `.github/workflows/lighthouse.yml` against built Pages site |
 
-## v1+ — experimental / deferred
+## After 1.0 — automation & experimental
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Web Worker physics | 🧪 Experimental | Implemented in `src/planned/worker-physics.ts` — **not** in public API / bundle |
-| OffscreenCanvas | 🧪 Experimental | Implemented in `src/planned/offscreen-render.ts` — not wired into `FrameLoop` |
-| Spatial indexing / collisions | 🧪 Experimental | `src/planned/collisions.ts` spatial hash — not wired into spawn loop |
+| npm Trusted Publishing (OIDC) | ⬜ Manual once | Package settings → Trusted Publisher → `MosheHatab/micro-canvas-confetti-physics` + `release.yml` |
+| npm provenance on CI publish | ✅ Ready | Set when Trusted Publisher or `NPM_TOKEN` publishes from Actions |
+| Web Worker physics | 🧪 Experimental | `src/planned/worker-physics.ts` — **not** in public API / bundle |
+| OffscreenCanvas | 🧪 Experimental | `src/planned/offscreen-render.ts` — not wired into `FrameLoop` |
+| Spatial indexing / collisions | 🧪 Experimental | `src/planned/collisions.ts` — not wired into spawn loop |
 | VitePress docs site | ⏸ Deferred | TypeDoc on Pages `/api/` covers API reference |
 | i18n | ⏸ Deferred | Demo English only; library has no user-facing copy |
-| npm provenance | ✅ Workflow ready | Completes on first successful publish |
 
 Imports from `src/planned/` are **not** published. See `src/planned/README.md`.

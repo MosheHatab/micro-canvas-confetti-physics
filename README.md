@@ -89,7 +89,7 @@ confettiSequence([
 - `getLastFrameMs()` — last frame render time in ms
 - `downloadSnapshot(dataUrl, filename?)` — save a PNG in the browser
 
-See [ROADMAP.md](./ROADMAP.md) for v0.2 polish status and v1+ planned features.
+**v1.0.0** is published on npm. See [CHANGELOG.md](./CHANGELOG.md) and [ROADMAP.md](./ROADMAP.md) for shipped features and post-1.0 experiments.
 
 ### CDN (IIFE)
 

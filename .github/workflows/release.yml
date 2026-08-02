@@ -3,6 +3,7 @@ name: Release
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -32,9 +33,35 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Skip when there is nothing for Changesets to do (no pending .changeset
+      # files and package.json version already matches npm). Avoids red Release
+      # runs on every docs/chore push after a manual first publish.
+      - name: Decide release mode
+        id: mode
+        run: |
+          PENDING=$(find .changeset -maxdepth 1 -type f -name '*.md' ! -name 'README.md' | wc -l | tr -d ' ')
+          LOCAL=$(node -p "require('./package.json').version")
+          REMOTE=$(npm view micro-canvas-confetti-physics version 2>/dev/null || echo "")
+          echo "pending=$PENDING"
+          echo "local=$LOCAL"
+          echo "remote=$REMOTE"
+          echo "local=$LOCAL" >> "$GITHUB_OUTPUT"
+          if [ "$PENDING" != "0" ]; then
+            echo "mode=changesets" >> "$GITHUB_OUTPUT"
+          elif [ -n "$REMOTE" ] && [ "$LOCAL" = "$REMOTE" ]; then
+            echo "mode=noop" >> "$GITHUB_OUTPUT"
+          else
+            echo "mode=publish" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: No release work
+        if: steps.mode.outputs.mode == 'noop'
+        run: echo "No pending changesets and v${{ steps.mode.outputs.local }} already on npm — skipping."
+
       # setup-node writes an empty `_authToken` when NPM_TOKEN is unset, which
       # blocks npm's OIDC trusted-publishing exchange. Clear it so OIDC works.
       - name: Prefer OIDC when NPM_TOKEN is unset
+        if: steps.mode.outputs.mode != 'noop'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
@@ -45,8 +72,9 @@ jobs:
           fi
 
       # Opens/updates a "Version Packages" PR when changesets exist, and
-      # publishes to npm when that PR is merged (NPM_TOKEN or OIDC trusted publisher).
+      # publishes to npm when a version is unpublished (NPM_TOKEN or OIDC).
       - name: Create Release PR or publish
+        if: steps.mode.outputs.mode != 'noop'
         uses: changesets/action@v1
         with:
           version: npm run version

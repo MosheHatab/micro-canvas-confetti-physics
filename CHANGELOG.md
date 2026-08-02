@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.0.0
+
+### Major Changes
+
+- First stable public release on npm: [`micro-canvas-confetti-physics@1.0.0`](https://www.npmjs.com/package/micro-canvas-confetti-physics)
+- Confetti-first public API: `confetti()`, `confetti.promise()`, presets, `duration` / `scalar` / `decay`, `burstRadius`, trails, `confetti.snapshot()`, `confettiSequence()`
+- Zero-dependency ESM + CJS builds with TypeScript types and `./physics` subpath
+- Live demo + TypeDoc API docs on GitHub Pages
+
+### Notes
+
+- Local `npm run publish:safe` disables provenance (OIDC provenance is for CI Trusted Publishing)
+- Future versions: add a changeset → merge → Version Packages PR, or configure npm Trusted Publisher for `release.yml`
+
 ## 0.2.0
 
 ### Minor Changes
