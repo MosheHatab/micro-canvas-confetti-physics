@@ -79,7 +79,7 @@
     "release": "npm run build && changeset publish",
     "size": "size-limit",
     "check:package": "publint && attw --pack . --profile node16",
-    "publish:safe": "npm run build && npm run check:package && npm publish",
+    "publish:safe": "npm run build && npm run check:package && npm publish --provenance=false",
     "prepare": "husky"
   },
   "devDependencies": {
