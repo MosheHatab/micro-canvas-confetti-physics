@@ -32,6 +32,7 @@ export default defineConfig({
 	plugins: [demoBaseRedirect(), tailwindcss()],
 	resolve: {
 		alias: {
+			"micro-canvas-confetti-physics/physics": resolve(__dirname, "src/physics.ts"),
 			"micro-canvas-confetti-physics": resolve(__dirname, "src/index.ts"),
 		},
 	},
@@ -42,5 +43,11 @@ export default defineConfig({
 	build: {
 		outDir: "../dist-demo",
 		emptyOutDir: true,
+		rollupOptions: {
+			input: {
+				main: resolve(__dirname, "demo/index.html"),
+				benchmark: resolve(__dirname, "demo/benchmark.html"),
+			},
+		},
 	},
 });
