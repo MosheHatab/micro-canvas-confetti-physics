@@ -92,7 +92,7 @@
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^26.1.2",
     "@vitest/coverage-v8": "^4.1.9",
-    "eslint": "^9.39.4",
+    "eslint": "^10.8.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-simple-import-sort": "^13.0.0",
     "eslint-plugin-unused-imports": "^4.4.1",
